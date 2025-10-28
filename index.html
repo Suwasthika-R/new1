@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShoeStore - Premium Footwear Online</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container 
+        { 
+        max-width: 1200px; margin: 0 auto;
+         background: white; border-radius: 20px; padding: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+          }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #eee; }
+        h1 { color: #667eea; font-size: 2.5em;
+         }
+        .cart-icon
+         { 
+         position: relative; cursor: pointer; font-size: 2em; color: #667eea; }
+        .cart-count 
+        { position: absolute;
+         top: -10px; right: -10px; background: #ff6b6b; color: white; border-radius: 50%; width: 25px; height: 25px; display: flex; align-items: center; justify-content: center; font-size: 0.5em; font-weight: bold; }
+        .products-grid 
+        { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-bottom: 30px; }
+        .product-card { 
+        background: #f8f9fa; border-radius: 15px; padding: 20px; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; }
+        .product-card:hover { 
+        transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .product-image {
+         width: 100%; height: 200px; background: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 4em; margin-bottom: 15px; }
+        .product-name {
+         font-size: 1.3em; font-weight: bold; color: #333; margin-bottom: 10px; }
+        .product-price { 
+        font-size: 1.5em; color: #667eea; font-weight: bold; }
+        .product-detail { 
+        display: none; animation: fadeIn 0.3s; }
+        @keyframes fadeIn {
+         from { opacity: 0; } to { opacity: 1; } }
+        .detail-content {
+         display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+        .detail-image {
+         width: 100%; height: 400px; background: #f8f9fa; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 8em; }
+        .detail-info h2 {
+         font-size: 2em; color: #333; margin-bottom: 15px; }
+        .detail-price { 
+        font-size: 2em; color: #667eea; font-weight: bold; margin-bottom: 20px; }
+        .description {
+         color: #666; line-height: 1.6; margin-bottom: 20px; }
+        .features { list-style: none; margin-bottom: 30px; }
+        .features li {
+         padding: 10px 0; border-bottom: 1px solid #eee; color: #555; }
+        .features li:before { content: "✓ "; color: #667eea; font-weight: bold; margin-right: 10px; }
+        button { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 15px 40px; font-size: 1.1em; border-radius: 10px; cursor: pointer; transition: transform 0.2s; margin-right: 10px; }
+        button:hover { transform: scale(1.05); }
+        button.secondary { background: #6c757d; }
+        .cart-section, .checkout-section { display: none; animation: fadeIn 0.3s; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: #f8f9fa; border-radius: 10px; margin-bottom: 15px; }
+        .cart-item-info { display: flex; align-items: center; gap: 20px; }
+        .cart-item-icon { font-size: 3em; }
+        .cart-total { text-align: right; font-size: 1.8em; color: #667eea; font-weight: bold; margin: 30px 0; padding: 20px; background: #f8f9fa; border-radius: 10px; }
+        .checkout-form { max-width: 600px; margin: 0 auto; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; color: #333; font-weight: bold; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; font-size: 1em; }
+        .confirmation { display: none; text-align: center; animation: fadeIn 0.3s; }
+        .confirmation-icon { font-size: 5em; color: #28a745; margin-bottom: 20px; }
+        .confirmation h2 { color: #28a745; margin-bottom: 20px; }
+        .order-summary { background: #f8f9fa; padding: 30px; border-radius: 10px; margin: 30px 0; text-align: left; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>👟 ShoeStore</h1>
+            <div class="cart-icon" onclick="showCart()">🛒<span class="cart-count" id="cartCount">0</span></div>
+        </header>
+        <div id="productsPage" class="products-page"><h2 style="margin-bottom: 20px; color: #333;">Featured Collection</h2><div class="products-grid" id="productsGrid"></div></div>
+        <div id="productDetail" class="product-detail"></div>
+        <div id="cartPage" class="cart-section"><h2 style="margin-bottom: 20px; color: #333;">Shopping Cart</h2><div id="cartItems"></div><div class="cart-total" id="cartTotal"></div><button onclick="proceedToCheckout()">Proceed to Checkout</button><button class="secondary" onclick="showProducts()">Continue Shopping</button></div>
+        <div id="checkoutPage" class="checkout-section"><h2 style="margin-bottom: 30px; color: #333; text-align: center;">Checkout</h2><div class="checkout-form"><form id="checkoutForm" onsubmit="processPayment(event)"><div class="form-group"><label>Full Name</label><input type="text" required placeholder="John Doe"></div><div class="form-group"><label>Email</label><input type="email" required placeholder="john@example.com"></div><div class="form-group"><label>Phone</label><input type="tel" required placeholder="+1234567890"></div><div class="form-group"><label>Address</label><input type="text" required placeholder="123 Main Street"></div><div class="form-group"><label>City</label><input type="text" required placeholder="New York"></div><div class="form-group"><label>Payment Method</label><select required><option value="">Select Payment Method</option><option value="card">Credit/Debit Card</option><option value="upi">UPI</option><option value="cod">Cash on Delivery</option></select></div><div class="cart-total" id="checkoutTotal"></div><button type="submit">Confirm Payment</button><button type="button" class="secondary" onclick="showCart()">Back to Cart</button></form></div></div>
+        <div id="confirmationPage" class="confirmation"><div class="confirmation-icon">✅</div><h2>Order Confirmed!</h2><p style="color: #666; font-size: 1.2em; margin-bottom: 30px;">Thank you for your purchase!</p><div class="order-summary" id="orderSummary"></div><button onclick="startNewOrder()">Continue Shopping</button></div>
+    </div>
+    
+<script>
+let cart = [];
+
+const products = [
+  {
+    id: 1,
+    name: "Classic Running Shoes",
+    price: 89.99,
+    image: "running-shoes.jpeg",
+    description: "Perfect for your daily runs and casual wear. These shoes combine comfort with style.",
+    features: ["Breathable mesh upper", "Cushioned sole", "Lightweight design", "Available in multiple colors"]
+  },
+  {
+    id: 2,
+    name: "Sports Sneakers",
+    price: 129.99,
+    image: "sports-sneakers.jpg",
+    description: "High-performance sneakers designed for athletes and fitness enthusiasts.",
+    features: ["Advanced grip technology", "Shock absorption", "Durable construction", "Professional grade"]
+  },
+  {
+    id: 3,
+    name: "Casual Loafers",
+    price: 79.99,
+    image: "casual-loafers.jpg",
+    description: "Elegant loafers perfect for office wear and formal occasions.",
+    features: ["Premium leather", "Comfortable fit", "Classic design", "Easy to maintain"]
+  },
+  {
+    id: 4,
+    name: "High-Top Boots",
+    price: 149.99,
+    image: "high-top-boots.jpg",
+    description: "Rugged boots built for adventure and outdoor activities.",
+    features: ["Waterproof material", "Ankle support", "All-terrain grip", "Weather resistant"]
+  },
+  {
+    id: 5,
+    name: "Summer Sandals",
+    price: 49.99,
+    image: "summer-sandals.jpg",
+    description: "Comfortable sandals perfect for beach days and summer outings.",
+    features: ["Soft footbed", "Anti-slip sole", "Quick-dry material", "Stylish design"]
+  },
+  {
+    id: 6,
+    name: "Basketball Shoes",
+    price: 159.99,
+    image: "basketball-shoes.jpg",
+    description: "Professional basketball shoes with superior ankle support and cushioning.",
+    features: ["High ankle support", "Maximum cushioning", "Enhanced traction", "Pro athlete approved"]
+  }
+];
+
+function displayProducts() {
+  document.getElementById("productList").innerHTML = `
+    <div class='product-grid'>
+      ${products.map(product => `
+        <div class='product-card' onclick="showProductDetail(${product.id})">
+          <div class='product-image'>
+            <img src="${product.image}" alt="${product.name}" style="width:100%; height:200px; object-fit:contain; border-radius:10px;">
+          </div>
+          <h3>${product.name}</h3>
+          <p>$${product.price.toFixed(2)}</p>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function showProductDetail(id) {
+  const product = products.find(p => p.id === id);
+  document.getElementById("productList").style.display = "none";
+  document.getElementById("productDetail").style.display = "block";
+  document.getElementById("productDetail").innerHTML = `
+    <div class="detail-content">
+      <div class="detail-image">
+        <img src="${product.image}" alt="${product.name}" style="width:100%; height:100%; object-fit:contain; border-radius:15px;">
+      </div>
+      <div class="detail-info">
+        <h2>${product.name}</h2>
+        <p>${product.description}</p>
+        <ul>${product.features.map(f => `<li>${f}</li>`).join('')}</ul>
+        <h3>Price: $${product.price.toFixed(2)}</h3>
+        <button onclick="addToCart(${product.id})">Add to Cart</button>
+        <button onclick="backToHome()">Back</button>
+      </div>
+    </div>
+  `;
+}
+
+function backToHome() {
+  document.getElementById("productDetail").style.display = "none";
+  document.getElementById("productList").style.display = "block";
+}
+
+function addToCart(productId) {
+  const product = products.find(p => p.id === productId);
+  cart.push(product);
+  updateCartCount();
+  alert(`${product.name} added to cart!`);
+}
+
+function updateCartCount() {
+  document.getElementById("cartCount").textContent = cart.length;
+}
+
+function showCart() {
+  document.getElementById("productList").style.display = "none";
+  document.getElementById("productDetail").style.display = "none";
+  document.getElementById("checkoutSection").style.display = "none";
+  document.getElementById("confirmationSection").style.display = "none";
+  document.getElementById("cartSection").style.display = "block";
+  
+  if (cart.length === 0) {
+    document.getElementById("cartSection").innerHTML = `
+      <h2>Your Cart is Empty 🛒</h2>
+      <button onclick="backToHome()">Back to Home</button>
+    `;
+    return;
+  }
+
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
+  document.getElementById("cartSection").innerHTML = `
+    <h2>Your Cart 🛍️</h2>
+    ${cart.map((item, index) => `
+      <div class="cart-item">
+        <div class="cart-item-icon">
+          <img src="${item.image}" alt="${item.name}" style="width:60px; height:60px; object-fit:contain; border-radius:8px;">
+        </div>
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+        <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
+      </div>
+    `).join('')}
+    <h3>Total: $${total.toFixed(2)}</h3>
+    <button onclick="proceedToCheckout()">Proceed to Checkout</button>
+    <button onclick="backToHome()">Continue Shopping</button>
+  `;
+}
+
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  updateCartCount();
+  showCart();
+}
+
+function proceedToCheckout() {
+  document.getElementById("cartSection").style.display = "none";
+  document.getElementById("checkoutSection").style.display = "block";
+}
+
+function processPayment() {
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const address = document.getElementById("address").value.trim();
+  const payment = document.querySelector("select").value;
+
+  if (!name || !email || !address || !payment) {
+    alert("Please fill in all details before confirming payment!");
+    return;
+  }
+
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+  document.getElementById("checkoutSection").style.display = "none";
+  document.getElementById("confirmationSection").style.display = "block";
+  document.getElementById("confirmationSection").innerHTML = `
+    <h2>🎉 Order Confirmed!</h2>
+    <p>Thank you, <b>${name}</b>! Your order has been placed successfully.</p>
+    <p>Total Amount: <b>$${total.toFixed(2)}</b></p>
+    <h3>Order Summary:</h3>
+    ${cart.map(item => `
+      <div>
+        <img src="${item.image}" alt="${item.name}" style="width:40px; height:40px; vertical-align:middle; margin-right:10px; border-radius:5px;"> 
+        ${item.name} - $${item.price.toFixed(2)}
+      </div>
+    `).join('')}
+    <button onclick="backToHome()">Back to Home</button>
+  `;
+
+  cart = [];
+  updateCartCount();
+}
+
+displayProducts();
+</script>
+
+
+
+
+
+
+
+
+        
+    </script>
+</body>
+</html>

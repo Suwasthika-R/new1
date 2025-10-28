@@ -1,0 +1,113 @@
+/* 🌸 General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* 🧡 Overall Page Style */
+body {
+  background-color: #ffe5b4; /* peach background for main page */
+  color: #333;
+}
+
+/* 🌸 Navbar */
+.navbar {
+  background-color: #ffb6b9; /* light pink navbar */
+  padding: 15px 20px;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* 🌸 Buttons */
+button {
+  background-color: #ff8c94; /* coral pink */
+  border: none;
+  color: rgb(110, 45, 45);
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: 500;
+}
+
+button:hover {
+  background-color: #ff6f69; /* deeper peachy pink */
+}
+
+/* 💛 Product Grid */
+#productsPage {
+  background-color: #f3d61ef7; /* peach */
+  padding: 40px;
+  min-height: 100vh;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+/* ❤️ Product Cards (changed lavender blush → soft red) */
+.product-card {
+  background-color: #ffcccc; /* soft light red */
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 20px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+}
+
+.product-card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* 💙 Cart Page */
+#cartPage {
+  background-color: #e0f7fa; /* light aqua */
+  padding: 40px;
+  min-height: 100vh;
+}
+
+/* 💚 Checkout Page */
+#checkoutPage {
+  background-color: #f1d130; /* light green */
+  padding: 40px;
+  min-height: 100vh;
+}
+
+/* 💗 Confirmation Page */
+#confirmationPage {
+  background-color: #f36a9a; /* baby pink */
+  text-align: center;
+  padding: 60px;
+  min-height: 100vh;
+}
+
+/* 🩵 Cart Items */
+.cart-item {
+  background-color: #fff8e1; /* soft cream */
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* 🌈 Footer (optional if you have one) */
+footer {
+  background-color: #ffb6b9;
+  text-align: center;
+  color: white;
+  padding: 15px;
+  font-weight: bold;
+}
